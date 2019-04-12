@@ -777,6 +777,7 @@ defaultContainerResources = ContainerResources {
                         , blkioDeviceWriteBps=Nothing
                         , blkioDeviceReadIOps=Nothing
                         , blkioDeviceWriteIOps=Nothing
+                        , cpuQuota=Nothing
                         , cpuPeriod=Nothing
                         , cpusetCpus=Nothing
                         , cpusetMems=Nothing
@@ -1452,7 +1453,7 @@ data ContainerResources = ContainerResources {
                         , blkioDeviceReadIOps  :: Maybe [DeviceRate] -- TODO: Not Text
                         , blkioDeviceWriteIOps :: Maybe [DeviceRate] -- TODO: Not Text
                         , cpuPeriod            :: Maybe Integer
-                        -- , cpuQuota          :: Integer -- 1.24: Missing from inspecting container details... Going to omit for now.
+                        , cpuQuota             :: Maybe Integer
                         , cpusetCpus           :: Maybe Text
                         , cpusetMems           :: Maybe Text
                         , devices              :: [Device]
