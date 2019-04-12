@@ -17,6 +17,9 @@ module Docker.Client.Types (
     , Timeout(..)
     , StatusCode(..)
     , Signal(..)
+    , CpuUsage (..)
+    , CpuStats (..)
+    , ContainerStats (..)
     , ContainerDetails(..)
     , DockerClientOpts(..)
     , defaultClientOpts
@@ -229,6 +232,44 @@ instance ToJSON Signal where
     toJSON SIGUSR1 = "SIGUSR1"
     toJSON (SIG i) = toJSON i
     toJSON SIGKILL = "SIGKILL"
+
+data CpuUsage = CpuUsage
+  { perCpuUsage :: [Int]
+  , totalUsage :: Int
+  }
+
+instance FromJSON CpuUsage where
+  parseJSON (JSON.Object o) = do
+    perCpuUsage <- o .: "per_cpu_usage"
+    totalUsage <- o .: "total_usage"
+    return $ CpuUsage perCpuUsage totalUsage
+  parseJSON _ = fail "CpuUsage is not an object"
+
+data CpuStats = CpuStats
+  { cpuUsage :: [Int]
+  , systemCpuUsage :: Int
+  }
+  deriving (Eq,Ord,Show)
+
+instance FromJSON CpuStats where
+  parseJSON (JSON.Object o) = do
+    cpuUsage <- o .: "cpu_usage"
+    systemCpuUsage <- o .: "system_cpu_usage"
+    return $ CpuStats cpuUsage systemCpuUsage
+  parseJSON _ = fail "CpuStats is not an object"
+
+data ContainerStats = ContainerStats
+  { cpuStats :: CpuStats}
+  deriving (Eq,Ord,Show)
+
+
+instance FromJSON ContainerStats where
+  parseJSON (JSON.Object o) = do
+    cpuStats <- o .: "cpu_stats"
+    return $ ContainerStats cpuStats
+  parseJSON _ = fail "ContainerStats is not an object"
+
+
 
 data ContainerDetails = ContainerDetails {
       appArmorProfile            :: Text
