@@ -244,7 +244,7 @@ data CpuUsage = CpuUsage
 
 instance FromJSON CpuUsage where
   parseJSON (JSON.Object o) = do
-    perCpuUsage <- o .: "per_cpu_usage"
+    perCpuUsage <- o .: "percpu_usage"
     totalUsage <- o .: "total_usage"
     return $ CpuUsage perCpuUsage totalUsage
   parseJSON _ = fail "CpuUsage is not an object"
@@ -263,13 +263,16 @@ instance FromJSON CpuStats where
   parseJSON _ = fail "CpuStats is not an object"
 
 data ContainerStats = ContainerStats
-  { cpuStats :: CpuStats}
+  { cpuStats :: CpuStats
+  , preCpuStats :: CpuStats
+  }
   deriving (Eq,Ord,Show)
 
 
 instance FromJSON ContainerStats where
   parseJSON (JSON.Object o) = do
     cpuStats <- o .: "cpu_stats"
+    preCpuStats <- o .: "precpu_stats"
     return $ ContainerStats cpuStats
   parseJSON _ = fail "ContainerStats is not an object"
 
