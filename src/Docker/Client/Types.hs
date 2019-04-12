@@ -273,7 +273,7 @@ instance FromJSON ContainerStats where
   parseJSON (JSON.Object o) = do
     cpuStats <- o .: "cpu_stats"
     preCpuStats <- o .: "precpu_stats"
-    return $ ContainerStats cpuStats
+    return $ ContainerStats cpuStats preCpuStats
   parseJSON _ = fail "ContainerStats is not an object"
 
 
