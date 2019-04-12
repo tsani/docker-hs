@@ -240,6 +240,7 @@ data CpuUsage = CpuUsage
   { perCpuUsage :: [Int]
   , totalUsage :: Int
   }
+  deriving (Eq, Ord, Show)
 
 instance FromJSON CpuUsage where
   parseJSON (JSON.Object o) = do
@@ -249,7 +250,7 @@ instance FromJSON CpuUsage where
   parseJSON _ = fail "CpuUsage is not an object"
 
 data CpuStats = CpuStats
-  { cpuUsage :: [Int]
+  { cpuUsage :: CpuUsage
   , systemCpuUsage :: Int
   }
   deriving (Eq,Ord,Show)
