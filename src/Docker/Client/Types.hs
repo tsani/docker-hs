@@ -133,7 +133,10 @@ data Endpoint =
       | RestartContainerEndpoint Timeout ContainerID
       | PauseContainerEndpoint ContainerID
       | UnpauseContainerEndpoint ContainerID
-      | ContainerLogsEndpoint LogOpts Bool ContainerID -- ^ Second argument (Bool) is whether to follow which is currently hardcoded to False.
+      | ContainerLogsEndpoint LogOpts Bool ContainerID
+        -- ^ Second argument (Bool) is whether to follow which is currently hardcoded to False.
+      | ContainerStatsEndpoint Bool ContainerID
+        -- ^ Second argument (Bool) is whether to stream, which is currently hardcoded to False.
       -- See note in 'Docker.Client.Api.getContainerLogs' for explanation why.
       | DeleteContainerEndpoint ContainerDeleteOpts ContainerID
       | InspectContainerEndpoint ContainerID

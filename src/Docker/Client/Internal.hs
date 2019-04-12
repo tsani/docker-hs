@@ -54,6 +54,9 @@ getEndpoint v (RestartContainerEndpoint t cid) = encodeURLWithQuery [v, "contain
 getEndpoint v (PauseContainerEndpoint cid) = encodeURL [v, "containers", fromContainerID cid, "pause"]
 getEndpoint v (UnpauseContainerEndpoint cid) = encodeURL [v, "containers", fromContainerID cid, "unpause"]
 -- Make use of since/timestamps/tail logopts here instead of ignoreing them
+getEndpoint v (ContainerStatsEndpoint follow cid) =
+  encodeURLWithQuery [v, "containers", fromContainerID cid, "stats"] query where
+    query = [("follow", Just (encodeQ $ show follow))]
 getEndpoint v (ContainerLogsEndpoint (LogOpts stdout stderr _ _ _) follow cid) =
             encodeURLWithQuery    [v, "containers", fromContainerID cid, "logs"] query
         where query = [("stdout", Just (encodeQ $ show stdout)), ("stderr", Just (encodeQ $ show stderr)), ("follow", Just (encodeQ $ show follow))]
@@ -91,6 +94,7 @@ getEndpointRequestBody (KillContainerEndpoint _ _) = Nothing
 getEndpointRequestBody (RestartContainerEndpoint _ _) = Nothing
 getEndpointRequestBody (PauseContainerEndpoint _) = Nothing
 getEndpointRequestBody (UnpauseContainerEndpoint _) = Nothing
+getEndpointRequestBody (ContainerStatsEndpoint _ _) = Nothing
 getEndpointRequestBody (ContainerLogsEndpoint _ _ _) = Nothing
 getEndpointRequestBody (DeleteContainerEndpoint _ _) = Nothing
 getEndpointRequestBody (InspectContainerEndpoint _) = Nothing

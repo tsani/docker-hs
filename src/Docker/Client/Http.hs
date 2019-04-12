@@ -248,6 +248,11 @@ statusCodeToError (UnpauseContainerEndpoint _) st =
         Nothing
     else
         Just $ DockerInvalidStatusCode st
+statusCodeToError (ContainerStatsEndpoint _ _) st =
+  if st == status200 then
+    Nothing
+  else
+    Just $ DockerInvalidStatusCode st
 statusCodeToError (ContainerLogsEndpoint _ _ _) st =
     if st == status200 || st == status101 then
         Nothing

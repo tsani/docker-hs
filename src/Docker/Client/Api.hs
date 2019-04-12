@@ -14,6 +14,7 @@ module Docker.Client.Api (
     , unpauseContainer
     , deleteContainer
     , inspectContainer
+    , getContainerStats
     , getContainerLogs
     , getContainerLogsStream
     -- * Images
@@ -153,6 +154,12 @@ deleteContainer dopts cid = requestUnit DELETE $ DeleteContainerEndpoint dopts c
 -- | Gets 'ContainerDetails' for a given 'ContainerID'.
 inspectContainer :: forall m . (MonadIO m, MonadMask m) => ContainerID -> DockerT m (Either DockerError ContainerDetails)
 inspectContainer cid = requestHelper GET (InspectContainerEndpoint cid) >>= parseResponse
+
+-- | Gets 'ContainerStats' for a given 'ContainerID'.
+--
+-- This only retrieves one 'ContainerStats', and does not support streaming.
+getContainerStats :: forall m. (MonadIO m, MonadMask m) => ContainerID -> DockerT m (Either DockerError ContainerStats)
+getContainerStats cid = requestHelper GET (ContainerStatsEndpoint False cid) >>= parseResponse
 
 -- | Get's container's logs for a given 'ContainerID'.
 -- This will only work with the 'JsonFile' 'LogDriverType' as the other driver types disable
